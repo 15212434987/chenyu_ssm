@@ -10,4 +10,6 @@ public interface SysLogDao {
 
     //查询所有日志
     List<SysLog> findAll(String searchValue) throws Exception;
+
+    SysLog findById(String id);
 }

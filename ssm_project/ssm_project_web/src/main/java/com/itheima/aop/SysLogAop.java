@@ -9,6 +9,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,6 @@ import org.springframework.validation.support.BindingAwareModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Date;
@@ -37,6 +37,7 @@ public class SysLogAop {
     public void pid(){}
 
     //前置通知：获取访问当前系统时间
+    @Order(1)
     @Before("pid()")
     public void beforeMethod(){
          vistTime=new Date();
@@ -108,6 +109,7 @@ public class SysLogAop {
             sysLog.setMethod(mthodName);
 
             sysLogService.save(sysLog);
+
         }
     }
 }

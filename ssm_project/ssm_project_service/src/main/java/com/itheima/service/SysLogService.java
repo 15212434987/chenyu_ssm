@@ -10,4 +10,5 @@ public interface SysLogService {
 
     List<SysLog> findAll(Integer pageNum,Integer pageSize,String searchValue)throws Exception;
 
+
 }

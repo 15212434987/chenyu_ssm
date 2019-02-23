@@ -4,9 +4,10 @@ package com.itheima.domain;
 import com.itheima.utils.DateUtils;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
 import java.util.Date;
 @Component
-public class SysLog {
+public class SysLog implements Serializable{
 
   private String id;           //日志id
   private Date visitTime;      //访问时间

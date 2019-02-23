@@ -13,4 +13,8 @@
     <select id="findAll" resultType="sysLog">
         select * from SYSLOG
     </select>
+
+    <select id="findById" resultType="sysLog">
+        SELECT  * from SYSLOG WHERE ID = #{id}
+    </select>
 </mapper>

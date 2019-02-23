@@ -114,6 +114,10 @@
 										onclick="window.location.reload();">
 										<i class="fa fa-refresh"></i> 刷新
 									</button>
+									<button type="button" class="btn btn-default" title="导出"
+											onclick="fromsumbit()">
+										<i class="fa fa-refresh"></i> 导出
+									</button>
 								</div>
 							</div>
 						</div>
@@ -145,7 +149,7 @@
 							<tbody>
 								<c:forEach items="${pageInfo.list}" var="syslog">
 									<tr>
-										<td><input name="ids" type="checkbox"></td>
+										<td><input name="ids" class="ids" type="checkbox" value="${syslog.id}"></td>
 										<td>${syslog.id}</td>
 										<td>${syslog.visitTimeStr }</td>
 										<td>${syslog.username }</td>
@@ -191,16 +195,42 @@
 						<ul class="pagination">
 							<li><a href="${pageContext.request.contextPath}/sysLog/findAll?searchValue=${sv}&pageNum=1&pageSize=${pageInfo.pageSize}" aria-label="Previous">首页</a></li>
 							<li><a href="${pageContext.request.contextPath}/sysLog/findAll?searchValue=${sv}&pageNum=${pageInfo.pageNum-1}&pageSize=${pageInfo.pageSize}">上一页</a></li>
-							<c:forEach begin="1" end="${pageInfo.pages}" var="i">
-								<c:if test="${pageInfo.pageNum == i}">
-									<li>
-										<a style="border: red solid 1px"
-										   href="${pageContext.request.contextPath}/sysLog/findAll?searchValue=${sv}&pageNum=${i}&pageSize=${pageInfo.pageSize}">${i}</a></li>
-								</c:if>
-								<c:if test="${pageInfo.pageNum != i}">
-									<li><a href="${pageContext.request.contextPath}/sysLog/findAll?searchValue=${sv}&pageNum=${i}&pageSize=${pageInfo.pageSize}">${i}</a></li>
-								</c:if>
-							</c:forEach>
+							<c:if test="${pageInfo.pageNum<6}">
+								<c:forEach begin="1" end="10" var="i">
+									<c:if test="${pageInfo.pageNum == i}">
+										<li>
+											<a style="border: red solid 1px"
+											   href="${pageContext.request.contextPath}/sysLog/findAll?searchValue=${sv}&pageNum=${i}&pageSize=${pageInfo.pageSize}">${i}</a></li>
+									</c:if>
+									<c:if test="${pageInfo.pageNum != i}">
+										<li><a href="${pageContext.request.contextPath}/sysLog/findAll?searchValue=${sv}&pageNum=${i}&pageSize=${pageInfo.pageSize}">${i}</a></li>
+									</c:if>
+								</c:forEach>
+							</c:if>
+							<c:if test="${pageInfo.pageNum>5&&pageInfo.pageNum+5<pageInfo.pages}">
+								<c:forEach begin="${pageInfo.pageNum-4}" end="${pageInfo.pageNum+5}" var="i">
+									<c:if test="${pageInfo.pageNum == i}">
+										<li>
+											<a style="border: red solid 1px"
+											   href="${pageContext.request.contextPath}/sysLog/findAll?searchValue=${sv}&pageNum=${i}&pageSize=${pageInfo.pageSize}">${i}</a></li>
+									</c:if>
+									<c:if test="${pageInfo.pageNum != i}">
+										<li><a href="${pageContext.request.contextPath}/sysLog/findAll?searchValue=${sv}&pageNum=${i}&pageSize=${pageInfo.pageSize}">${i}</a></li>
+									</c:if>
+								</c:forEach>
+							</c:if>
+							<c:if test="${pageInfo.pageNum+5>=pageInfo.pages}">
+								<c:forEach begin="${pageInfo.pages-9}" end="${pageInfo.pages}" var="i">
+									<c:if test="${pageInfo.pageNum == i}">
+										<li>
+											<a style="border: red solid 1px"
+											   href="${pageContext.request.contextPath}/sysLog/findAll?searchValue=${sv}&pageNum=${i}&pageSize=${pageInfo.pageSize}">${i}</a></li>
+									</c:if>
+									<c:if test="${pageInfo.pageNum != i}">
+										<li><a href="${pageContext.request.contextPath}/sysLog/findAll?searchValue=${sv}&pageNum=${i}&pageSize=${pageInfo.pageSize}">${i}</a></li>
+									</c:if>
+								</c:forEach>
+							</c:if>
 
 
 							<li><a href="${pageContext.request.contextPath}/sysLog/findAll?searchValue=${sv}&pageNum=${pageInfo.pageNum+1}&pageSize=${pageInfo.pageSize}">下一页</a></li>
@@ -318,6 +348,17 @@
 		src="${pageContext.request.contextPath}/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
 
 	<script>
+
+		function fromsumbit() {
+            var ids = $(".ids");
+            var arr = new Array();
+            for (var i = 0; i < ids.length; i++) {
+                if (ids[i].checked) {
+                    arr.push(ids[i].value);
+                }
+            }
+            location.href = "${pageContext.request.contextPath}/sysLog/getExcel?ids=" + arr
+        }
 
         function search() {
             var str = $("#searchValue").val()

@@ -79,8 +79,6 @@ public class UserController {
     public String addRoleToUser(@RequestParam(name = "userId") String userId,
                                 @RequestParam(name = "roleIds", required = false, defaultValue = "") String roleIds) throws Exception {
 
-
-
         List<Role> rolesInUser = userService.getRolesInUser(userId);//用户已有的角色列表
 
         //1.用户没有角色,并且页面也没有传入roleIds,不执行任何操作,直接返回
