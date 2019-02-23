@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.dao.OrderDao">
+    <resultMap id="orders" type="order">
+        <id property="id" column="id"/>
+        <association property="product" javaType="product" column="productid"
+                     select="com.itheima.dao.ProductDao.findProductById" fetchType="lazy"/>
+
+        <association property="member" javaType="member" column="memberid"
+                     select="com.itheima.dao.MemberDao.findMemberById" fetchType="lazy"/>
+
+        <collection property="travellers" ofType="traveller" column="id"
+                     select="com.itheima.dao.TravellerDao.findTravellersInIds" fetchType="lazy"/>
+    </resultMap>
+
+
+    <!--查询所有订单-->
+    <select id="findAll" resultMap="orders">
+        select * from ORDERS
+        <where>
+            <if test="value != null and value !=''">
+                ORDERNUM like '%${value}%'
+            </if>
+        </where>
+    </select>
+
+    <!--查询订单详情-->
+    <select id="findOrderById" parameterType="java.lang.String" resultMap="orders">
+        select * from ORDERS where id = #{id}
+    </select>
+
+</mapper>

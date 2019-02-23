@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.dao.RoleDao">
+    <resultMap id="roles" type="role">
+        <id property="id" column="id"/>
+        <collection property="permissions" column="id" ofType="permission"
+                    select="com.itheima.dao.PermissionDao.findPermissionsInIds" fetchType="lazy"/>
+    </resultMap>
+
+    <!--用于向UserInfo中注入属性roles-->
+    <select id="findByUserId" parameterType="java.lang.String" resultMap="roles">
+        select * from ROLE where ID in (select ROLEID from USERS_ROLE where USERID = #{userId})
+    </select>
+
+    <!--查询所有角色-->
+    <select id="findAll" resultMap="roles">
+        select * from role
+    </select>
+
+    <!--查询角色详情-->
+    <select id="findRoleById" resultMap="roles">
+        select * from ROLE where id = #{id}
+    </select>
+
+    <!--添加新角色-->
+    <insert id="addRole" parameterType="role">
+        insert into role(ROLENAME,ROLEDESC) values(#{roleName},#{roleDesc})
+    </insert>
+
+    <!--查询角色没有的权限-->
+    <select id="findPermissionNotInRole" resultType="permission">
+        select * from PERMISSION where id not in
+         (select PERMISSIONID from ROLE_PERMISSION where ROLEID = #{roleId})
+    </select>
+
+    <!--给角色添加权限-->
+    <insert id="addPermissionToRole" >
+        insert into ROLE_PERMISSION VALUES (#{permissionId},#{roleId})
+    </insert>
+
+    <!--移除角色的权限-->
+    <delete id="removePermissionOnRole" parameterType="string">
+        DELETE from ROLE_PERMISSION where ROLEID = #{roleId} and PERMISSIONID =#{permissionId}
+    </delete>
+</mapper>

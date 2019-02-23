@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.dao.TravellerDao">
+
+    <!--用于给Order注入属性列表travellers-->
+    <select id="findTravellersInIds" parameterType="java.lang.String" resultType="traveller">
+        select * from TRAVELLER where id in (select TRAVELLERID from ORDER_TRAVELLER where orderid = #{orderid})
+    </select>
+</mapper>
