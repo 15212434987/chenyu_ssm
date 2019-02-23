@@ -70,9 +70,9 @@ public class UserServiceImpl implements UserService {
         return userDao.findUserById(id);
     }
 
-    //查询当前用户没有的角色
-    public List<Role> getRolesNotInUser(String id) throws Exception {
-        return userDao.getRolesNotInUser(id);
+    //查询当前用户拥有的角色
+    public List<Role> getRolesInUser(String id) throws Exception {
+        return userDao.getRolesInUser(id);
     }
 
     //给用户添加角色
@@ -83,7 +83,14 @@ public class UserServiceImpl implements UserService {
     }
 
     //移除用户的角色
-    public void removeRoleOnUser(String userId, String roleId) throws Exception{
-        userDao.removeRoleOnUser(userId,roleId);
+    public void removeRoleOnUser(String userId, String[] roleId) throws Exception {
+        for (String id : roleId) {
+            userDao.removeRoleOnUser(userId, id);
+        }
+    }
+
+    //移除该用户的所有角色
+    public void removeAllRole(String userId) throws Exception {
+        userDao.removeAllRole(userId);
     }
 }

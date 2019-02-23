@@ -36,8 +36,8 @@
     </select>
 
     <!--查询用户没有的角色-->
-    <select id="getRolesNotInUser" parameterType="string" resultType="role">
-      select * from role where id not IN (select ROLEID from USERS_ROLE where USERID = #{id})
+    <select id="getRolesInUser" parameterType="string" resultType="role">
+      select * from role where id IN (select ROLEID from USERS_ROLE where USERID = #{id})
     </select>
 
     <!--给用户添加角色-->
@@ -48,6 +48,11 @@
     <!--移除用户的角色-->
     <delete id="removeRoleOnUser" parameterType="string">
         DELETE FROM USERS_ROLE where USERID = #{userId} AND ROLEID = #{roleId}
+    </delete>
+
+    <!--移除传入id对应用户的所有角色-->
+    <delete id="removeAllRole" parameterType="string">
+        DELETE from USERS_ROLE WHERE USERID = #{userId}
     </delete>
 
 </mapper>

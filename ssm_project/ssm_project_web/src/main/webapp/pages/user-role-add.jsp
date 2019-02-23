@@ -117,7 +117,7 @@
 									<tr>
 										<td>
 										
-										<input name="roleIds" type="checkbox" value="${role.id}">
+										<input name="roleIds" type="checkbox" ${role.flag == 1?"checked":""} value="${role.id}">
 										
 										</td>
 										<td>${role.id}</td>

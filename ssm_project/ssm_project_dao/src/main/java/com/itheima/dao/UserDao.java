@@ -20,12 +20,15 @@ public interface UserDao {
     //用户详情
     UserInfo findUserById(String id)throws Exception;
 
-    //查询当前用户没有的角色
-    List<Role> getRolesNotInUser(String id)throws Exception;
+    //查询当前用户拥有的角色
+    List<Role> getRolesInUser(String id)throws Exception;
 
     //给用户添加角色
     void addRoleToUser(@Param("userId") String userId,@Param("roleId") String roleId)throws Exception;
 
     //移除用户的角色
     void removeRoleOnUser(@Param("userId")String userId, @Param("roleId")String roleId) throws Exception;
+
+    //移除该用户的所有角色
+    void removeAllRole(String userId);
 }

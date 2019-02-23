@@ -13,10 +13,12 @@ public interface UserService extends UserDetailsService{
 
     UserInfo findUserById(String id) throws Exception;
 
-    List<Role> getRolesNotInUser(String id) throws Exception;
+    List<Role> getRolesInUser(String id) throws Exception;
 
     void addRoleToUser(String userId, String[] roleIds) throws Exception;
 
-    void removeRoleOnUser(String userId, String roleId) throws Exception;
+    void removeRoleOnUser(String userId, String[] roleId) throws Exception;
+
+    void removeAllRole(String userId) throws Exception;
 //    UserInfo login(UserInfo userInfo);
 }
