@@ -22,15 +22,20 @@ public class ExportExcelServiceImpl implements ExportExcelService {
             SysLog sysLog = sysLogDao.findById(id);
             list.add(sysLog);
         }
-        String s = CreateExcelDemo(list);
-        return s;
+        return CreateExcelDemo(list);
     }
+
+    public String getExcel() throws Exception {
+        List<SysLog> all = sysLogDao.findAll("");
+        return CreateExcelDemo(all);
+    }
+
     public  <T> String CreateExcelDemo(List<T> list) throws Exception {
         String fileName = "";
         // 第一步，创建一个webbook，对应一个Excel文件  
         HSSFWorkbook wb = new HSSFWorkbook();
         // 第二步，在webbook中添加一个sheet,对应Excel文件中的sheet  
-        HSSFSheet sheet = wb.createSheet("学生表一");
+        HSSFSheet sheet = wb.createSheet("系统日志");
         // 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制short  
         HSSFRow row = sheet.createRow((int) 0);
         // 第四步，创建单元格，并设置值表头 设置表头居中  
@@ -55,13 +60,13 @@ public class ExportExcelServiceImpl implements ExportExcelService {
             row.createCell((short) 0).setCellValue(i);
             for (int j = 0; j < fields.length; j++) {
                 Character ch = fields[j].getName().charAt(0);
-                row.createCell((short) j+1).setCellValue(""+ clazz.getMethod("get" +ch.toString().toUpperCase()+fields[j].getName().substring(1)).invoke(obj));
+                row.createCell((short) j+1).setCellValue( clazz.getMethod("get" +ch.toString().toUpperCase()+fields[j].getName().substring(1)).invoke(obj).toString());
             }
 
         }
         // 第六步，将文件存到指定位置  
         try {
-            fileName = "D:/" + UUID.randomUUID().toString() + ".xls";
+            fileName = "J:\\idea_project2\\ssm_project\\ssm_project_web\\src\\download\\" + UUID.randomUUID().toString() + ".xls";
             FileOutputStream fout = new FileOutputStream(fileName);
             wb.write(fout);
             fout.close();

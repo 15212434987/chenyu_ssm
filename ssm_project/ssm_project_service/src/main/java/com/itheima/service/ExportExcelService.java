@@ -5,4 +5,6 @@ import java.util.List;
 public interface ExportExcelService {
 
     String getExcel(String[] split) throws Exception;
+
+    String getExcel() throws Exception;
 }

@@ -115,8 +115,12 @@
 										<i class="fa fa-refresh"></i> 刷新
 									</button>
 									<button type="button" class="btn btn-default" title="导出"
-											onclick="fromsumbit()">
-										<i class="fa fa-refresh"></i> 导出
+											onclick="fromsumbit('choose')">
+										<i class="fa fa-arrow-down"></i> 导出选中
+									</button>
+									<button type="button" class="btn btn-default" title="导出"
+											onclick="fromsumbit('all')">
+										<i class="fa fa-arrow-down"></i> 导出全部
 									</button>
 								</div>
 							</div>
@@ -349,7 +353,7 @@
 
 	<script>
 
-		function fromsumbit() {
+		function fromsumbit(kind) {
             var ids = $(".ids");
             var arr = new Array();
             for (var i = 0; i < ids.length; i++) {
@@ -357,7 +361,7 @@
                     arr.push(ids[i].value);
                 }
             }
-            location.href = "${pageContext.request.contextPath}/sysLog/getExcel?ids=" + arr
+            location.href = '${pageContext.request.contextPath}/sysLog/getExcel?kind='+kind+'&ids=' + arr
         }
 
         function search() {

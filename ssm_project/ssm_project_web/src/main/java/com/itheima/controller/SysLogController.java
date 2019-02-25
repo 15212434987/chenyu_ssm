@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import sun.plugin2.message.Serializer;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.*;
+import java.net.URLEncoder;
 import java.util.List;
 
 @Controller
@@ -35,10 +40,44 @@ public class SysLogController{
         return "syslog-list";
     }
 
+    //生成Excel表格
     @RequestMapping("/getExcel")
-    public String getExcel(String ids) throws Exception {
-        String[] split = ids.split(",");
-        String s = exportExcelService.getExcel(split);
-        return "redirect:/sysLog/findAll";
+    public String getExcel(@RequestParam(value = "ids",required = false,defaultValue = "") String ids,String kind, HttpServletRequest request) throws Exception {
+        String fileName = "";
+        if (kind.equals("choose")){
+            if (ids.equals("")){
+                return "forward:/sysLog/findAll";
+            }
+            String[] split = ids.split(",");
+            fileName = exportExcelService.getExcel(split);
+        }
+        if (kind.equals("all")){
+            fileName = exportExcelService.getExcel();
+        }
+        return "forward:/sysLog/download?fileName="+fileName;
+    }
+
+    //下载生成的Excel表格
+    @RequestMapping("/download")
+    public void downloadExcel(String fileName, HttpServletResponse response) throws Exception {
+
+        //将文件读取到内存
+        InputStream bis = new BufferedInputStream(new FileInputStream(new File(fileName)));
+
+        //给文件设置编码
+        fileName = URLEncoder.encode(fileName,"UTF-8");
+
+        //设置响应头和数据格式
+        response.addHeader("Content-Disposition", "attachment;filename=" + fileName);
+        response.setContentType("multipart/form-data");
+
+        //输出流
+        BufferedOutputStream out = new BufferedOutputStream(response.getOutputStream());
+        int len = 0;
+        while((len = bis.read()) != -1){
+            out.write(len);
+            out.flush();
+        }
+        out.close();
     }
 }
